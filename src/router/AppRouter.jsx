@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AuthRoutes } from '../auth/routes/AuthRoutes';
 
@@ -8,8 +10,10 @@ import { useCheckAuth } from '../hooks';
 
 export const AppRouter = () => {
 
-  const status = useCheckAuth();
+  const { rol } = useSelector( state => state.auth );
 
+  const status = useCheckAuth();
+  
   if ( status === 'checking' ) {
     return <CheckingAuth />
   }
@@ -18,7 +22,7 @@ export const AppRouter = () => {
     <Routes>
 
         {
-          (status === 'authenticated')
+          (rol === 1 && status === 'authenticated')
            ? <Route path="/*" element={ <JournalRoutes /> } />
            : <Route path="/auth/*" element={ <AuthRoutes /> } />
         }
